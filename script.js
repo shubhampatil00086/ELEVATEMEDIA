@@ -1,15 +1,18 @@
 /*=========================================
 ELEVATE MEDIA
-script.js
+SCRIPT.JS - PART 1
 =========================================*/
 
-/*============ PRELOADER ============*/
+
+/*==============================
+PRELOADER
+==============================*/
 
 window.addEventListener("load", () => {
 
     const loader = document.getElementById("loader");
 
-    if (loader) {
+    if(loader){
 
         loader.style.opacity = "0";
 
@@ -17,100 +20,111 @@ window.addEventListener("load", () => {
 
             loader.style.display = "none";
 
-        }, 500);
+        },500);
 
     }
 
 });
 
 
-/*============ MOBILE MENU ============*/
+/*==============================
+MOBILE MENU
+==============================*/
 
 const menu = document.querySelector(".menu");
+
 const nav = document.querySelector("nav");
 
-if (menu && nav) {
+menu.addEventListener("click",()=>{
 
-    menu.addEventListener("click", () => {
+    nav.classList.toggle("active");
 
-        nav.classList.toggle("active");
+    if(nav.classList.contains("active")){
 
-        if (nav.classList.contains("active")) {
+        menu.innerHTML = '<i class="fa-solid fa-xmark"></i>';
 
-            menu.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    }
 
-        } else {
+    else{
 
-            menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
 
-        }
+    }
+
+});
+
+
+document.querySelectorAll("nav a").forEach(link=>{
+
+    link.addEventListener("click",()=>{
+
+        nav.classList.remove("active");
+
+        menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
 
     });
 
-    document.querySelectorAll("nav a").forEach(link => {
-
-        link.addEventListener("click", () => {
-
-            nav.classList.remove("active");
-
-            menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
-
-        });
-
-    });
-
-}
+});
 
 
-/*============ STICKY HEADER ============*/
+/*==============================
+STICKY HEADER
+==============================*/
 
 const header = document.querySelector("header");
 
-window.addEventListener("scroll", () => {
+window.addEventListener("scroll",()=>{
 
-    if (!header) return;
+    if(window.scrollY>80){
 
-    if (window.scrollY > 80) {
+        header.style.background="rgba(0,0,0,.92)";
 
-        header.style.background = "rgba(0,0,0,.9)";
-        header.style.boxShadow = "0 10px 30px rgba(0,0,0,.4)";
+        header.style.boxShadow="0 12px 25px rgba(0,0,0,.35)";
 
-    } else {
+    }
 
-        header.style.background = "rgba(0,0,0,.45)";
-        header.style.boxShadow = "none";
+    else{
+
+        header.style.background="rgba(0,0,0,.45)";
+
+        header.style.boxShadow="none";
 
     }
 
 });
 
 
-/*============ ACTIVE NAVIGATION ============*/
+/*==============================
+ACTIVE NAVIGATION
+==============================*/
 
-const sections = document.querySelectorAll("section");
-const navLinks = document.querySelectorAll("nav a");
+const sections=document.querySelectorAll("section");
 
-window.addEventListener("scroll", () => {
+const navLinks=document.querySelectorAll("nav a");
 
-    let current = "";
+window.addEventListener("scroll",()=>{
 
-    sections.forEach(section => {
+    let current="";
 
-        const top = section.offsetTop - 150;
+    sections.forEach(section=>{
 
-        if (window.scrollY >= top) {
+        const sectionTop=section.offsetTop-150;
 
-            current = section.id;
+        const sectionHeight=section.clientHeight;
+
+        if(window.scrollY>=sectionTop){
+
+            current=section.getAttribute("id");
 
         }
 
     });
 
-    navLinks.forEach(link => {
+    navLinks.forEach(link=>{
 
         link.classList.remove("active");
 
-        if (link.getAttribute("href") === "#" + current) {
+        if(link.getAttribute("href")==="#"+current){
 
             link.classList.add("active");
 
@@ -121,31 +135,94 @@ window.addEventListener("scroll", () => {
 });
 
 
-/*============ LIGHTBOX ============*/
+/*==============================
+SCROLL REVEAL
+==============================*/
 
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.getElementById("lightboxImg");
-const closeLightbox = document.getElementById("closeLightbox");
+const observer=new IntersectionObserver((entries)=>{
 
-document.querySelectorAll(".project").forEach(project => {
+    entries.forEach(entry=>{
 
-    project.addEventListener("click", () => {
+        if(entry.isIntersecting){
 
-        const img = project.querySelector("img");
+            entry.target.classList.add("show");
 
-        if (!img) return;
+        }
 
-        lightbox.style.display = "flex";
+    });
 
-        lightboxImg.src = img.src;
+},{
+    threshold:.15
+});
 
-        lightboxImg.alt = img.alt;
+
+document.querySelectorAll(
+
+".service-card,.project,.box,.about-content,.about-image"
+
+).forEach(item=>{
+
+    item.classList.add("fade-up");
+
+    observer.observe(item);
+
+});
+
+
+console.log("Elevate Media Loaded Successfully");
+/*=========================================
+SCRIPT.JS - PART 2
+=========================================*/
+
+
+/*==============================
+SMOOTH SCROLL
+==============================*/
+
+document.querySelectorAll('nav a').forEach(anchor => {
+
+    anchor.addEventListener("click", function(e) {
+
+        const target = document.querySelector(this.getAttribute("href"));
+
+        if(target){
+
+            e.preventDefault();
+
+            target.scrollIntoView({
+
+                behavior: "smooth"
+
+            });
+
+        }
 
     });
 
 });
 
-if (closeLightbox) {
+
+/*==============================
+PORTFOLIO LIGHTBOX
+==============================*/
+
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+const closeLightbox = document.getElementById("closeLightbox");
+
+document.querySelectorAll(".project img").forEach(image => {
+
+    image.addEventListener("click", () => {
+
+        lightbox.style.display = "flex";
+
+        lightboxImg.src = image.src;
+
+    });
+
+});
+
+if(closeLightbox){
 
     closeLightbox.addEventListener("click", () => {
 
@@ -155,13 +232,13 @@ if (closeLightbox) {
 
 }
 
-if (lightbox) {
+if(lightbox){
 
-    lightbox.addEventListener("click", (e) => {
+    lightbox.addEventListener("click", function(e){
 
-        if (e.target === lightbox) {
+        if(e.target===lightbox){
 
-            lightbox.style.display = "none";
+            lightbox.style.display="none";
 
         }
 
@@ -170,19 +247,68 @@ if (lightbox) {
 }
 
 
-/*============ SCROLL TO TOP ============*/
+/*==============================
+WHATSAPP CONTACT FORM
+==============================*/
+
+const contactForm = document.querySelector(".contact form");
+
+if(contactForm){
+
+    contactForm.addEventListener("submit", function(e){
+
+        e.preventDefault();
+
+        const name =
+        contactForm.querySelector('input[type="text"]').value;
+
+        const email =
+        contactForm.querySelector('input[type="email"]').value;
+
+        const message =
+        contactForm.querySelector("textarea").value;
+
+        const whatsappMessage =
+`📩 *New Website Inquiry*
+
+👤 Name: ${name}
+
+📧 Email: ${email}
+
+💬 Message:
+${message}`;
+
+        const phone = "918669241982";
+
+        const url =
+`https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
+
+        window.open(url,"_blank");
+
+        alert("Redirecting to WhatsApp...");
+
+        contactForm.reset();
+
+    });
+
+}
+
+
+/*==============================
+SCROLL TO TOP
+==============================*/
 
 const topBtn = document.getElementById("topBtn");
 
-window.addEventListener("scroll", () => {
+window.addEventListener("scroll",()=>{
 
-    if (!topBtn) return;
-
-    if (window.scrollY > 500) {
+    if(window.scrollY>500){
 
         topBtn.classList.add("show");
 
-    } else {
+    }
+
+    else{
 
         topBtn.classList.remove("show");
 
@@ -190,15 +316,15 @@ window.addEventListener("scroll", () => {
 
 });
 
-if (topBtn) {
+if(topBtn){
 
-    topBtn.addEventListener("click", () => {
+    topBtn.addEventListener("click",()=>{
 
         window.scrollTo({
 
-            top: 0,
+            top:0,
 
-            behavior: "smooth"
+            behavior:"smooth"
 
         });
 
@@ -207,37 +333,8 @@ if (topBtn) {
 }
 
 
-/*============ SCROLL REVEAL ============*/
+/*==============================
+END
+==============================*/
 
-const observer = new IntersectionObserver((entries) => {
-
-    entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            entry.target.classList.add("show");
-
-        }
-
-    });
-
-}, {
-
-    threshold: 0.15
-
-});
-
-document.querySelectorAll(
-
-".service-card, .project, .box, .about-content, .about-image"
-
-).forEach(item => {
-
-    item.classList.add("fade-up");
-
-    observer.observe(item);
-
-});
-
-
-console.log("✅ Elevate Media Loaded Successfully");
+console.log("🚀 Elevate Media Website Ready");
