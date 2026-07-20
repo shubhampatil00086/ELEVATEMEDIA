@@ -113,19 +113,22 @@ window.addEventListener("scroll", () => {
 LIGHTBOX
 ==============================*/
 
-const projects = document.querySelectorAll(".project img");
-
+const projects = document.querySelectorAll(".project");
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
 const closeBtn = document.getElementById("closeLightbox");
 
-projects.forEach(img => {
+projects.forEach(project => {
 
-    img.addEventListener("click", () => {
+    project.addEventListener("click", () => {
+
+        const img = project.querySelector("img");
 
         lightbox.style.display = "flex";
 
         lightboxImg.src = img.src;
+
+        lightboxImg.alt = img.alt;
 
     });
 
@@ -139,14 +142,13 @@ closeBtn.addEventListener("click", () => {
 
 lightbox.addEventListener("click", (e) => {
 
-    if (e.target === lightbox) {
+    if(e.target === lightbox){
 
         lightbox.style.display = "none";
 
     }
 
 });
-
 /*==============================
 SCROLL TO TOP
 ==============================*/
