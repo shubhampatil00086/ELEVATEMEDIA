@@ -652,3 +652,20 @@ form button{
 }
 
 }
+nav.active{
+    display:flex;
+    flex-direction:column;
+    position:absolute;
+    top:80px;
+    right:20px;
+    background:#111;
+    padding:20px;
+    border-radius:12px;
+    width:220px;
+    gap:20px;
+}
+
+nav a.active{
+    color:#00d4ff;
+    font-weight:600;
+}
