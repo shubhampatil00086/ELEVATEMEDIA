@@ -1,51 +1,46 @@
-/*=========================================
+/*=====================================
 ELEVATE MEDIA
 SCRIPT.JS - PART 1
-=========================================*/
+======================================*/
 
 
-/*==============================
-PRELOADER
-==============================*/
+/*========== PRELOADER ==========*/
 
 window.addEventListener("load", () => {
 
     const loader = document.getElementById("loader");
 
-    if(loader){
+    if (loader) {
 
         loader.style.opacity = "0";
+
+        loader.style.transition = "0.5s";
 
         setTimeout(() => {
 
             loader.style.display = "none";
 
-        },500);
+        }, 500);
 
     }
 
 });
 
 
-/*==============================
-MOBILE MENU
-==============================*/
+/*========== MOBILE MENU ==========*/
 
-const menu = document.querySelector(".menu");
+const menu = document.getElementById("menu");
+const navbar = document.getElementById("navbar");
 
-const nav = document.querySelector("nav");
+menu.addEventListener("click", () => {
 
-menu.addEventListener("click",()=>{
+    navbar.classList.toggle("active");
 
-    nav.classList.toggle("active");
-
-    if(nav.classList.contains("active")){
+    if (navbar.classList.contains("active")) {
 
         menu.innerHTML = '<i class="fa-solid fa-xmark"></i>';
 
-    }
-
-    else{
+    } else {
 
         menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
 
@@ -54,11 +49,11 @@ menu.addEventListener("click",()=>{
 });
 
 
-document.querySelectorAll("nav a").forEach(link=>{
+document.querySelectorAll("#navbar a").forEach(link => {
 
-    link.addEventListener("click",()=>{
+    link.addEventListener("click", () => {
 
-        nav.classList.remove("active");
+        navbar.classList.remove("active");
 
         menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
 
@@ -67,64 +62,53 @@ document.querySelectorAll("nav a").forEach(link=>{
 });
 
 
-/*==============================
-STICKY HEADER
-==============================*/
+/*========== STICKY HEADER ==========*/
 
-const header = document.querySelector("header");
+const header = document.getElementById("header");
 
-window.addEventListener("scroll",()=>{
+window.addEventListener("scroll", () => {
 
-    if(window.scrollY>80){
+    if (window.scrollY > 50) {
 
-        header.style.background="rgba(0,0,0,.92)";
+        header.style.background = "rgba(8,16,31,.95)";
+        header.style.boxShadow = "0 10px 25px rgba(0,0,0,.35)";
 
-        header.style.boxShadow="0 12px 25px rgba(0,0,0,.35)";
+    } else {
 
-    }
-
-    else{
-
-        header.style.background="rgba(0,0,0,.45)";
-
-        header.style.boxShadow="none";
+        header.style.background = "rgba(15,23,42,.65)";
+        header.style.boxShadow = "none";
 
     }
 
 });
 
 
-/*==============================
-ACTIVE NAVIGATION
-==============================*/
+/*========== ACTIVE NAVIGATION ==========*/
 
-const sections=document.querySelectorAll("section");
+const sections = document.querySelectorAll("section");
+const navLinks = document.querySelectorAll("#navbar a");
 
-const navLinks=document.querySelectorAll("nav a");
+window.addEventListener("scroll", () => {
 
-window.addEventListener("scroll",()=>{
+    let current = "";
 
-    let current="";
+    sections.forEach(section => {
 
-    sections.forEach(section=>{
+        const sectionTop = section.offsetTop - 120;
 
-        const sectionTop=section.offsetTop-150;
+        if (window.scrollY >= sectionTop) {
 
-        const sectionHeight=section.clientHeight;
-
-        if(window.scrollY>=sectionTop){
-
-            current=section.getAttribute("id");
+            current = section.getAttribute("id");
 
         }
 
     });
 
-    navLinks.forEach(link=>{
+    navLinks.forEach(link => {
 
         link.classList.remove("active");
 
-        if(link.getAttribute("href")==="#"+current){
+        if (link.getAttribute("href") === "#" + current) {
 
             link.classList.add("active");
 
@@ -135,15 +119,13 @@ window.addEventListener("scroll",()=>{
 });
 
 
-/*==============================
-SCROLL REVEAL
-==============================*/
+/*========== SCROLL REVEAL ==========*/
 
-const observer=new IntersectionObserver((entries)=>{
+const observer = new IntersectionObserver((entries) => {
 
-    entries.forEach(entry=>{
+    entries.forEach(entry => {
 
-        if(entry.isIntersecting){
+        if (entry.isIntersecting) {
 
             entry.target.classList.add("show");
 
@@ -151,41 +133,119 @@ const observer=new IntersectionObserver((entries)=>{
 
     });
 
-},{
-    threshold:.15
+}, {
+
+    threshold: 0.15
+
 });
 
 
 document.querySelectorAll(
 
-".service-card,.project,.box,.about-content,.about-image"
+".about-image,.about-content,.service-card,.stat-card,.project,.contact-info,form"
 
-).forEach(item=>{
+).forEach(element => {
 
-    item.classList.add("fade-up");
+    element.classList.add("fade-up");
 
-    observer.observe(item);
+    observer.observe(element);
 
 });
 
 
-console.log("Elevate Media Loaded Successfully");
-/*=========================================
+console.log("✅ Part 1 Loaded");
+/*=====================================
+ELEVATE MEDIA
 SCRIPT.JS - PART 2
-=========================================*/
+======================================*/
 
 
-/*==============================
-SMOOTH SCROLL
-==============================*/
+/*========== ANIMATED COUNTERS ==========*/
 
-document.querySelectorAll('nav a').forEach(anchor => {
+const counters = document.querySelectorAll(".counter");
+
+const counterObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            const counter = entry.target;
+
+            const target = +counter.dataset.target;
+
+            let count = 0;
+
+            const speed = target / 100;
+
+            const updateCounter = () => {
+
+                if (count < target) {
+
+                    count += speed;
+
+                    counter.innerText = Math.ceil(count);
+
+                    requestAnimationFrame(updateCounter);
+
+                } else {
+
+                    if (target === 300) {
+
+                        counter.innerText = "300+";
+
+                    } else if (target === 150) {
+
+                        counter.innerText = "150+";
+
+                    } else if (target === 5) {
+
+                        counter.innerText = "5+";
+
+                    } else if (target === 24) {
+
+                        counter.innerText = "24/7";
+
+                    } else {
+
+                        counter.innerText = target;
+
+                    }
+
+                }
+
+            };
+
+            updateCounter();
+
+            counterObserver.unobserve(counter);
+
+        }
+
+    });
+
+}, {
+
+    threshold: 0.5
+
+});
+
+counters.forEach(counter => {
+
+    counterObserver.observe(counter);
+
+});
+
+
+/*========== SMOOTH SCROLL ==========*/
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
     anchor.addEventListener("click", function(e) {
 
         const target = document.querySelector(this.getAttribute("href"));
 
-        if(target){
+        if (target) {
 
             e.preventDefault();
 
@@ -202,9 +262,7 @@ document.querySelectorAll('nav a').forEach(anchor => {
 });
 
 
-/*==============================
-PORTFOLIO LIGHTBOX
-==============================*/
+/*========== PORTFOLIO LIGHTBOX ==========*/
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
@@ -218,55 +276,104 @@ document.querySelectorAll(".project img").forEach(image => {
 
         lightboxImg.src = image.src;
 
+        document.body.style.overflow = "hidden";
+
     });
 
 });
 
-if(closeLightbox){
+closeLightbox.addEventListener("click", () => {
 
-    closeLightbox.addEventListener("click", () => {
+    lightbox.style.display = "none";
+
+    document.body.style.overflow = "auto";
+
+});
+
+lightbox.addEventListener("click", (e) => {
+
+    if (e.target === lightbox) {
 
         lightbox.style.display = "none";
 
+        document.body.style.overflow = "auto";
+
+    }
+
+});
+
+
+/*========== SCROLL TO TOP ==========*/
+
+const topBtn = document.getElementById("topBtn");
+
+window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 500) {
+
+        topBtn.classList.add("show");
+
+    } else {
+
+        topBtn.classList.remove("show");
+
+    }
+
+});
+
+topBtn.addEventListener("click", () => {
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
     });
 
-}
-
-if(lightbox){
-
-    lightbox.addEventListener("click", function(e){
-
-        if(e.target===lightbox){
-
-            lightbox.style.display="none";
-
-        }
-
-    });
-
-}
+});
 
 
-/*==============================
-WHATSAPP CONTACT FORM
-==============================*/
+console.log("✅ Part 2 Loaded");
+/*=====================================
+ELEVATE MEDIA
+SCRIPT.JS - PART 3
+======================================*/
 
-const contactForm = document.querySelector(".contact form");
 
-if(contactForm){
+/*========== WHATSAPP CONTACT FORM ==========*/
 
-    contactForm.addEventListener("submit", function(e){
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+
+    contactForm.addEventListener("submit", function (e) {
 
         e.preventDefault();
 
-        const name =
-        contactForm.querySelector('input[type="text"]').value;
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const subject = document.getElementById("subject").value.trim();
+        const message = document.getElementById("message").value.trim();
 
-        const email =
-        contactForm.querySelector('input[type="email"]').value;
+        if (!name || !email || !subject || !message) {
 
-        const message =
-        contactForm.querySelector("textarea").value;
+            alert("Please fill in all fields.");
+
+            return;
+
+        }
+
+        const emailPattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email)) {
+
+            alert("Please enter a valid email address.");
+
+            return;
+
+        }
 
         const whatsappMessage =
 `📩 *New Website Inquiry*
@@ -275,17 +382,19 @@ if(contactForm){
 
 📧 Email: ${email}
 
+📝 Subject: ${subject}
+
 💬 Message:
 ${message}`;
 
-        const phone = "918669241982";
+        const phoneNumber = "918669241982";
 
-        const url =
-`https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
+        const whatsappURL =
+            `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
-        window.open(url,"_blank");
+        window.open(whatsappURL, "_blank");
 
-        alert("Redirecting to WhatsApp...");
+        alert("Thank you! WhatsApp is opening. Please tap Send to deliver your message.");
 
         contactForm.reset();
 
@@ -294,47 +403,29 @@ ${message}`;
 }
 
 
-/*==============================
-SCROLL TO TOP
-==============================*/
+/*========== ESC KEY CLOSE LIGHTBOX ==========*/
 
-const topBtn = document.getElementById("topBtn");
+document.addEventListener("keydown", function (e) {
 
-window.addEventListener("scroll",()=>{
+    if (e.key === "Escape") {
 
-    if(window.scrollY>500){
+        if (lightbox.style.display === "flex") {
 
-        topBtn.classList.add("show");
+            lightbox.style.display = "none";
 
-    }
+            document.body.style.overflow = "auto";
 
-    else{
-
-        topBtn.classList.remove("show");
+        }
 
     }
 
 });
 
-if(topBtn){
 
-    topBtn.addEventListener("click",()=>{
+/*========== PAGE READY ==========*/
 
-        window.scrollTo({
+window.addEventListener("load", () => {
 
-            top:0,
+    console.log("🚀 Elevate Media Website Loaded Successfully");
 
-            behavior:"smooth"
-
-        });
-
-    });
-
-}
-
-
-/*==============================
-END
-==============================*/
-
-console.log("🚀 Elevate Media Website Ready");
+});
