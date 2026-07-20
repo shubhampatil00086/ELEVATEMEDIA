@@ -1,66 +1,79 @@
-/*==============================
-PRELOADER
-==============================*/
+/*=========================================
+ELEVATE MEDIA
+script.js
+=========================================*/
+
+/*============ PRELOADER ============*/
 
 window.addEventListener("load", () => {
 
     const loader = document.getElementById("loader");
 
-    loader.style.opacity = "0";
+    if (loader) {
 
-    setTimeout(() => {
-        loader.style.display = "none";
-    }, 500);
+        loader.style.opacity = "0";
 
-});
+        setTimeout(() => {
 
-/*==============================
-MOBILE MENU
-==============================*/
+            loader.style.display = "none";
 
-const menu = document.querySelector(".menu");
-const nav = document.querySelector("nav");
-
-menu.addEventListener("click", () => {
-
-    nav.classList.toggle("active");
-
-    if (nav.classList.contains("active")) {
-
-        menu.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-
-    } else {
-
-        menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }, 500);
 
     }
 
 });
 
-document.querySelectorAll("nav a").forEach(link => {
 
-    link.addEventListener("click", () => {
+/*============ MOBILE MENU ============*/
 
-        nav.classList.remove("active");
+const menu = document.querySelector(".menu");
+const nav = document.querySelector("nav");
 
-        menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
+if (menu && nav) {
+
+    menu.addEventListener("click", () => {
+
+        nav.classList.toggle("active");
+
+        if (nav.classList.contains("active")) {
+
+            menu.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+
+        } else {
+
+            menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
+
+        }
 
     });
 
-});
+    document.querySelectorAll("nav a").forEach(link => {
 
-/*==============================
-STICKY HEADER
-==============================*/
+        link.addEventListener("click", () => {
+
+            nav.classList.remove("active");
+
+            menu.innerHTML = '<i class="fa-solid fa-bars"></i>';
+
+        });
+
+    });
+
+}
+
+
+/*============ STICKY HEADER ============*/
 
 const header = document.querySelector("header");
 
 window.addEventListener("scroll", () => {
 
+    if (!header) return;
+
     if (window.scrollY > 80) {
 
-        header.style.background = "rgba(0,0,0,.85)";
-        header.style.boxShadow = "0 10px 25px rgba(0,0,0,.4)";
+        header.style.background = "rgba(0,0,0,.9)";
+        header.style.boxShadow = "0 10px 30px rgba(0,0,0,.4)";
 
     } else {
 
@@ -71,9 +84,8 @@ window.addEventListener("scroll", () => {
 
 });
 
-/*==============================
-ACTIVE NAV LINK
-==============================*/
+
+/*============ ACTIVE NAVIGATION ============*/
 
 const sections = document.querySelectorAll("section");
 const navLinks = document.querySelectorAll("nav a");
@@ -84,12 +96,11 @@ window.addEventListener("scroll", () => {
 
     sections.forEach(section => {
 
-        const sectionTop = section.offsetTop - 120;
-        const sectionHeight = section.clientHeight;
+        const top = section.offsetTop - 150;
 
-        if (pageYOffset >= sectionTop) {
+        if (window.scrollY >= top) {
 
-            current = section.getAttribute("id");
+            current = section.id;
 
         }
 
@@ -109,20 +120,20 @@ window.addEventListener("scroll", () => {
 
 });
 
-/*==============================
-LIGHTBOX
-==============================*/
 
-const projects = document.querySelectorAll(".project");
+/*============ LIGHTBOX ============*/
+
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
-const closeBtn = document.getElementById("closeLightbox");
+const closeLightbox = document.getElementById("closeLightbox");
 
-projects.forEach(project => {
+document.querySelectorAll(".project").forEach(project => {
 
     project.addEventListener("click", () => {
 
         const img = project.querySelector("img");
+
+        if (!img) return;
 
         lightbox.style.display = "flex";
 
@@ -134,30 +145,40 @@ projects.forEach(project => {
 
 });
 
-closeBtn.addEventListener("click", () => {
+if (closeLightbox) {
 
-    lightbox.style.display = "none";
-
-});
-
-lightbox.addEventListener("click", (e) => {
-
-    if(e.target === lightbox){
+    closeLightbox.addEventListener("click", () => {
 
         lightbox.style.display = "none";
 
-    }
+    });
 
-});
-/*==============================
-SCROLL TO TOP
-==============================*/
+}
+
+if (lightbox) {
+
+    lightbox.addEventListener("click", (e) => {
+
+        if (e.target === lightbox) {
+
+            lightbox.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/*============ SCROLL TO TOP ============*/
 
 const topBtn = document.getElementById("topBtn");
 
 window.addEventListener("scroll", () => {
 
-    if (window.scrollY > 400) {
+    if (!topBtn) return;
+
+    if (window.scrollY > 500) {
 
         topBtn.classList.add("show");
 
@@ -169,21 +190,24 @@ window.addEventListener("scroll", () => {
 
 });
 
-topBtn.addEventListener("click", () => {
+if (topBtn) {
 
-    window.scrollTo({
+    topBtn.addEventListener("click", () => {
 
-        top: 0,
+        window.scrollTo({
 
-        behavior: "smooth"
+            top: 0,
+
+            behavior: "smooth"
+
+        });
 
     });
 
-});
+}
 
-/*==============================
-SCROLL ANIMATION
-==============================*/
+
+/*============ SCROLL REVEAL ============*/
 
 const observer = new IntersectionObserver((entries) => {
 
@@ -191,8 +215,7 @@ const observer = new IntersectionObserver((entries) => {
 
         if (entry.isIntersecting) {
 
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
+            entry.target.classList.add("show");
 
         }
 
@@ -204,14 +227,17 @@ const observer = new IntersectionObserver((entries) => {
 
 });
 
-document.querySelectorAll(".service-card,.project,.box,.about-content,.about-image").forEach(el => {
+document.querySelectorAll(
 
-    el.style.opacity = "0";
-    el.style.transform = "translateY(60px)";
-    el.style.transition = ".8s ease";
+".service-card, .project, .box, .about-content, .about-image"
 
-    observer.observe(el);
+).forEach(item => {
+
+    item.classList.add("fade-up");
+
+    observer.observe(item);
 
 });
 
-console.log("Elevate Media Website Loaded Successfully 🚀");
+
+console.log("✅ Elevate Media Loaded Successfully");
